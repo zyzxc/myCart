@@ -44,7 +44,7 @@
                                         <a class="item-check-btn" :class="{'check':item.checked}"
                                            @click="selectProduct(item)">
                                             <svg class="icon icon-ok">
-                                                <use xlink:href="#icon-ok"></use>
+                                                <use xlink:href="#icon-ok" x="50" y="50"></use>
                                             </svg>
                                         </a>
                                     </div>
@@ -52,17 +52,17 @@
                                         <img :src="item.productImage" alt="烟">
                                     </div>
                                     <div class="cart-item-title">
-                                        <div class="item-name">{{item.productName}}</div>
+                                        <div class="item-name">{{item.goodsName}}</div>
                                     </div>
                                     <div class="item-include">
                                         <dl>
                                             <dt>赠送:</dt>
-                                            <dd v-for="part in item.parts">{{part.partsName}}</dd>
+                                            <dd v-for="part in item.gifts">{{part.giftName}}</dd>
                                         </dl>
                                     </div>
                                 </div>
                                 <div class="cart-tab-2">
-                                    <div class="item-price">{{item.productPrice|formatMoney}}</div>
+                                    <div class="item-price">{{item.price|formatMoney("元")}}</div>
                                 </div>
                                 <div class="cart-tab-3">
                                     <div class="item-quantity">
@@ -74,12 +74,12 @@
                                                 <a @click="changeMoney(item,1)">+</a>
                                             </div>
                                         </div>
-                                        <div class="item-stock">有货</div>
+                                        <div class="item-stock">{{hasGoods}}</div>
                                     </div>
                                 </div>
                                 <div class="cart-tab-4">
                                     <div class="item-price-total">
-                                        {{item.productPrice*item.productQuantity|money("元")}}
+                                        {{item.price*item.productQuantity|formatMoney("元")}}
                                     </div>
                                 </div>
                                 <div class="cart-tab-5">
@@ -115,7 +115,7 @@
                     </div>
                     <div class="cart-foot-r">
                         <div class="item-total">
-                            总金额: <span class="total-price">{{totalMoney | money("元")}}</span>
+                            总金额: <span class="total-price">{{totalMoney | formatMoney("元")}}</span>
                         </div>
                         <div class="next-btn-wrap">
                             <a href="address.html" class="btn btn--red" style="width: 200px">结账</a>
@@ -147,6 +147,7 @@
 
 <script src="js/lib/vue.min.js"></script>
 <script src="js/lib/vue-resource.js"></script>
+<script src="js/config.js"></script>
 <script src="js/cart.js"></script>
 </body>
 </html>

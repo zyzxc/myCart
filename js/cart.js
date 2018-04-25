@@ -5,11 +5,12 @@ new Vue({
         productList: [],
         checkAllFlag: false,
         delFlag: false,
-        curProduct: []
+        curProduct: [],
+        hasGoods: "有货"
     },
     filters: {
-        formatMoney: function (value) {
-            return "￥" + value.toFixed(2);
+        formatMoney: function (value, type) {
+            return "￥" + value.toFixed(2) + type;
         }
     },
     created: function () {
@@ -17,13 +18,20 @@ new Vue({
     },
     methods: {
         cartView: function () {
-            this.$http.get("data/cartData.json").then(res => {
+            this.$http.get(webRoot + "goods/getUserCart").then(res => {
                 //this.totalMoney = res.data.result.totalMoney;
                 this.productList = res.data.result.list;
+                this.productList.forEach(function (item, index) {
+                    item["productQuantity"] = item["count"];
+                })
             })
 
         },
         changeMoney: function (product, way) {
+            if (product.productQuantity > product.amount) {
+                this.hasGoods = "货物紧缺";
+                return;
+            }
             if (way > 0) {
                 product.productQuantity++;
             } else if (way < 0) {
@@ -60,7 +68,7 @@ new Vue({
             _this.totalMoney = 0;
             this.productList.forEach(function (item, index) {
                 if (item.checked) {
-                    _this.totalMoney += item.productPrice * item.productQuantity;
+                    _this.totalMoney += item.price * item.productQuantity;
                 }
             })
         },
@@ -74,8 +82,4 @@ new Vue({
             this.delFlag = false;
         }
     }
-})
-
-Vue.filter("money", function (value, type) {
-    return "￥" + value.toFixed(2) + type;
 })
